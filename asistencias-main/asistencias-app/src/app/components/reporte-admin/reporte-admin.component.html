@@ -1,0 +1,67 @@
+<div class="row row-cols-1 row-cols-md-3 " *ngIf="!aulaSeleccionada" style="width: 900px;">
+    <div class="col my-3" *ngFor="let aula of aulas">
+        <div class="card border-secondary mb-3 h-100 g-4 my-3" style="width: 18rem;">
+            <div class="card-header bg-transparent border-secondary">Aula: {{aula.nombre}}</div>
+            <div class="card-body ">
+              <p class="card-text"> Auxiliar: {{aula.auxiliar.nombre}} {{aula.auxiliar.apellidoPaterno}} {{aula.auxiliar.apellidoMaterno}}</p>
+            </div>
+            <div class="card-footer bg-transparent border-secondary text-center text-info" style="cursor: pointer;" (click)="seleccionarAula(aula)">Ver reporte de asistencia</div>
+          </div>
+    </div>
+</div>
+  <!-- <div class="d-flex justify-content-around mt-5" style="width: 900px;" *ngIf="aulaSeleccionada == undefined">
+    <div class="card border-secondary mb-3" style="width: 18rem;" *ngFor="let aula of aulas">
+        <div class="card-header bg-transparent border-secondary">Aula: {{aula.nombre}}</div>
+        <div class="card-body ">
+          <p class="card-text"> Auxiliar: {{aula.auxiliar.nombre}} {{aula.auxiliar.apellidoPaterno}} {{aula.auxiliar.apellidoMaterno}}</p>
+        </div>
+        <div class="card-footer bg-transparent border-secondary text-center text-info" style="cursor: pointer;" (click)="seleccionarAula(aula)">Ver reporte de asistencia</div>
+      </div>
+  </div> -->
+
+  <button class="btn btn-secondary mt-5" (click)="mostrarAulas()" *ngIf="aulaSeleccionada">Mostrar aulas</button>
+
+  <div class="card mt-3" style="width: 1100px;" *ngIf="aulaSeleccionada">
+    <div class="card-header"><h4>Reporte de Aula -  {{aulaSeleccionada.nombre}}</h4></div>
+    <div class="card-body">
+        <div class="d-flex justify-content-between w-100" >
+            <div>
+                <h4>Asistieron</h4>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between" style="width: 500px;" *ngFor="let asistencia of asistencias">
+                        {{asistencia.estudiante.nombre}} {{asistencia.estudiante.apellidoPaterno}} {{asistencia.estudiante.apellidoPaterno}} - {{asistencia.estudiante.codigoEstudiante}}
+                        <div >
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" disabled [(ngModel)]="asistencia.ingresoConfirmado">
+                                <label class="form-check-label" for="inlineCheckbox3">A</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" disabled [(ngModel)]="asistencia.salidaConfirmado">
+                                <label class="form-check-label" for="inlineCheckbox3">S</label>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-info" style="width: 500px;" *ngIf="estudiantesConAsistencia.length == 0">
+                        No hay estudiantes con asistencia.
+                    </li>
+                </ul>
+            </div>
+            
+            
+            <div class="ms-5">
+                <h4>Faltaron </h4>
+                <ul class="list-group ">
+                    <li class="list-group-item list-group-item-danger" style="width: 500px;" *ngFor="let estudiante of estudiantesSinAsistencia">
+                        {{estudiante.nombre}} {{estudiante.apellidoPaterno}} {{estudiante.apellidoPaterno}} - {{estudiante.codigoEstudiante}}
+                    </li>
+                    <li class="list-group-item list-group-item-info" style="width: 500px;" *ngIf="estudiantesSinAsistencia.length == 0">
+                        No hay estudiantes que inasistencia.
+                    </li>
+                </ul>
+            </div>
+        
+        </div>
+    </div>
+
+</div>
+

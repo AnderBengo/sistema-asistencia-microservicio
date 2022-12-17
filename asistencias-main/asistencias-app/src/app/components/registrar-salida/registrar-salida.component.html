@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="card mt-5" style="width: 600px; margin: auto;">
+        <div class="card-body">
+            <h2>REGISTRO DE SALIDA</h2>
+            <label class="mb-2" for="">Ingrese el código del estudiante</label>
+            <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="estudiante.codigoEstudiante">
+                <button type="button" class="btn btn-outline-secondary" (click)="registrarSalida()">Registrar</button>
+            </div>
+
+            <div class="alert mt-4" role="alert" *ngIf="mostrarDatosAsistencia" [ngClass]="codigoRespuesta == 'SUCCESS' ? 'alert-success' : 'alert-warning'">
+              <h5 *ngIf="asistencia">
+                <div *ngIf="asistencia.estudiante">
+                  {{asistencia.estudiante.nombre}} 
+                  {{asistencia.estudiante.apellidoPaterno}} 
+                  {{asistencia.estudiante.apellidoMaterno}} - 
+                  {{asistencia.estudiante.codigoEstudiante}} -
+                  {{asistencia.estudiante.aula.nombre}}
+                </div>
+              </h5>
+              <span>
+                {{mensaje}}
+              </span>
+
+            </div>
+
+        </div>
+      </div>
+</div>

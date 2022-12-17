@@ -1,0 +1,22 @@
+<nav class="navbar navbar-light navbar-expand-lg" style="background-color: #4ba3e2;">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-white" href="#">SISTEMA DE REGISTRO</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <button class="btn btn-danger" *ngIf="usuario" (click)="cerrarSesion()">Cerrar sesión</button>
+  </div>
+</nav>
+
+<div class="d-flex">
+  <div style="width: 15%; height: 92.5vh; background: #4ba3e2;" *ngIf="usuario">
+    <a [routerLink]="'registrar-asistencia'" *ngIf="usuario !== 'ADMIN'" class="list-group-item list-group-item-action text-white" style="background: #4ba3e2;">Registrar asistencia</a>
+    <a [routerLink]="'registrar-salida'" *ngIf="usuario !== 'ADMIN'" class="list-group-item list-group-item-action text-white" style="background: #4ba3e2;">Registrar salida</a>
+    <a [routerLink]="'reporte-auxiliar'" *ngIf="usuario !== 'ADMIN'" class="list-group-item list-group-item-action text-white" style="background: #4ba3e2;">Reporte de asistencia</a>
+    <a [routerLink]="'reporte-admin'" *ngIf="usuario == 'ADMIN'" class="list-group-item list-group-item-action text-white" style="background: #4ba3e2;">Reporte de administrador</a>
+    <a [routerLink]="'simulacion'" *ngIf="usuario == 'ADMIN'" class="list-group-item list-group-item-action text-white" style="background: #4ba3e2;">Simulación</a>
+  </div>
+  <div class="d-flex justify-content-center" style="width: 85%;">
+    <router-outlet></router-outlet>
+  </div>
+</div>

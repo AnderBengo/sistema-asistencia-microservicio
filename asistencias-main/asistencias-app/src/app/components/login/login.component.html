@@ -1,0 +1,17 @@
+<form style="width: 400px; margin-left: 280px;">
+    <div class="my-3" >
+        <h4 >LOGIN</h4>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Usuario</label>
+      <input type="email" class="form-control" [(ngModel)]="usuario" name="usuario" id="exampleInputEmail1" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+      <input type="password" class="form-control" [(ngModel)]="password" name="password" id="exampleInputPassword1">
+    </div>
+
+    <p class="mb-0 text-danger" *ngIf="mostrarMensajeError">Contraseña y/o Usuario incorrecto.</p>
+    <br>
+    <button type="submit" class="btn btn-primary" (click)="login()">Ingresar</button>
+  </form>

@@ -1,0 +1,268 @@
+<div class="container">
+    <div class="card mt-5 p-4" style="width: 950px; margin: auto;">
+        <div>
+            <div class="d-flex form-group col-sm-12">
+                <label for="sexo" class="col-sm-5 d-flex align-items-center">Elija un grado para mostrar las simulaciones</label>
+                        <div class="col-sm-4">
+                            <select [(ngModel)]="gradoSeleccionado" class="form-select" name="sexo" (change)="buscarSimulacionesPorGrado()">
+                                <option [ngValue]="undefined">--- Seleccionar grado ---</option>
+                                <option *ngFor="let g of grados" [ngValue]="g">{{g.nombre}}</option>
+                            </select>
+                        </div>
+            </div>
+        </div>
+        <hr class="my-3" *ngIf="gradoSeleccionado">
+        <h5 *ngIf="gradoSeleccionado">Lista de simulaciones</h5>
+
+        
+
+        <div *ngIf="gradoSeleccionado" class="mb-3">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" >
+                Crear simulación
+            </button>
+        </div>
+
+        <div class="alert alert-info my-3" *ngIf="simulacionesAula.length == 0 && gradoSeleccionado">
+            No hay simulaciones.
+        </div>
+        <div *ngIf="simulacionesAula.length > 0">
+
+
+            <div class="row row-cols-1 row-cols-md-3 g-4" >
+                <div class="col" *ngFor="let simulacion of simulacionesAula" data-bs-toggle="modal" data-bs-target="#items" style="cursor: pointer;" (click)="cargarItems(simulacion)">
+                    <div  class="card" style="width: 18rem;">
+                        <div class="card-header">
+                            {{simulacion.nombre}}
+                          </div>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Fecha inicio: {{simulacion.fechaInicio}}</li>
+                            <li class="list-group-item">Fecha fin: {{simulacion.fechaFin}}</li>
+                            <li class="list-group-item"> Estado: 
+                                <span class="badge bg-success" *ngIf="simulacion.activo">Activo</span>
+                                <span class="badge bg-danger" *ngIf="!simulacion.activo">Inactivo</span>
+                            </li>
+                          </ul>   
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    
+    </div>
+
+
+      
+      <!-- Modal -->
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog ">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Crear simulación</h5>
+            </div>
+            <form [formGroup]="formularioSimulacion">
+            <div class="modal-body">
+              
+                <div class="mb-3 row">
+                    <label  class="col-sm-4 col-form-label">Nombre</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control"  formControlName="nombre">
+                      <div *ngIf="nombre?.invalid && (nombre?.dirty || nombre?.touched)"
+                      class="text-danger">
+                  
+                    <span *ngIf="nombre?.errors?.['required']">
+                      Campo requerido
+                    </span>
+                  </div>
+                    </div>
+                  </div>
+                <div class="mb-3 row">
+                    <label class="col-sm-4 col-form-label">Fecha Inicio</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" formControlName="fechaInicio" placeholder="12-10-2022 22:10:00">
+                      <span>Ejm: 12-10-2022 22:10:00</span>
+                      <div *ngIf="fechaInicio?.invalid && (fechaInicio?.dirty || fechaInicio?.touched)"
+                      class="text-danger">
+                  
+                    <span *ngIf="fechaInicio?.errors?.['required']">
+                      Campo requerido
+                    </span>
+                    <span *ngIf="fechaInicio?.errors?.['pattern']">
+                      Ingrese una fecha válida. Ejm: 12-10-2022 22:10:00
+                    </span>
+                  </div>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label  class="col-sm-4 col-form-label">Fecha Final</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" formControlName="fechaFin" placeholder="13-10-2022 22:10:00">
+                      <span>Ejm: 12-10-2022 22:10:00</span>
+                      <div *ngIf="fechaFin?.invalid && (fechaFin?.dirty || fechaFin?.touched)"
+                      class="text-danger">
+                  
+                    <span *ngIf="fechaFin?.errors?.['required']">
+                      Campo requerido
+                    </span>
+                    <span *ngIf="fechaFin?.errors?.['pattern']">
+                      Ingrese una fecha válida. Ejm: 12-10-2022 22:10:00
+                    </span>
+                  </div>
+                    </div>
+                  </div>
+                  <div class="mb-3 row">
+                    <label  class="col-sm-4 col-form-label">Alumnos por aula</label>
+                    <div class="col-sm-8">
+                      <input type="number" class="form-control"  formControlName="cantidadSimulacion">
+                      <span style="font-size: 15px;" *ngIf="gradoSeleccionado" class="text-success">Cantidad de estudiantes en este grado: {{cantidadEstudiantes}}</span>
+                      <div *ngIf="cantidadSimulacion?.invalid && (cantidadSimulacion?.dirty || cantidadSimulacion?.touched)"
+                      class="text-danger">
+                  
+                    <span *ngIf="cantidadSimulacion?.errors?.['required']">
+                      Campo requerido
+                    </span>
+                    <span *ngIf="cantidadSimulacion?.errors?.['pattern']">
+                        Ingresar solo números positivos.
+                    </span>
+                  </div>
+                    </div>
+                  </div>
+              
+            </div>
+            <div class="alert alert-success mx-2 " *ngIf="creadoStatus">Ejecución exitosa</div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="limpiarForm()">Cerrar</button>
+              <button type="button" class="btn btn-primary" [disabled]="formularioSimulacion.invalid" (click)="crearSimulacion()">Crear</button>
+            </div>
+        </form>
+          </div>
+        </div>
+      </div>
+
+
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="items" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Aulas dividas</h5>
+        </div>
+
+        
+
+        <div class="modal-body">
+          <div>
+            <button type="button" class="btn btn-primary btn-sm mb-2"  (click)="habilitarAsistencia()">Registrar asistencia</button>
+            <button type="button" class="btn btn-primary btn-sm mb-2 ms-2"  (click)="habilitarSalida()">Registrar salida</button>
+            <button type="button" class="btn btn-secondary btn-sm mb-2 ms-2"  (click)="cerrarAsistencias()" *ngIf="ingresoAsistencia || salidaAsistencia">Regresar</button>
+          </div>
+          <div class="card" style="width: 400px;" *ngIf="ingresoAsistencia || salidaAsistencia">
+            <div class="card-body">
+                <h5  *ngIf="ingresoAsistencia">REGISTRO DE ASISTENCIA</h5>
+                <h5 *ngIf="salidaAsistencia">REGISTRO DE SALIDA</h5>
+                <label class="mb-2" for="">Ingrese el código del estudiante</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" [(ngModel)]="estudiante.codigoEstudiante">
+                    <button type="button" class="btn btn-outline-secondary" (click)="registrarAsistencia()"  *ngIf="ingresoAsistencia">Registrar</button>
+                    <button type="button" class="btn btn-outline-secondary" (click)="registrarSalida()"  *ngIf="salidaAsistencia">Registrar</button>
+                </div>
+    
+                <div class="alert mt-4" role="alert" *ngIf="mostrarDatosAsistencia" [ngClass]="codigoRespuesta == 'SUCCESS' ? 'alert-success' : 'alert-warning'">
+                  <h5 *ngIf="asistencia">
+                    <div *ngIf="asistencia.estudiante && asistencia.estudiante.nombre">
+                    {{asistencia.estudiante.nombre}} 
+                    {{asistencia.estudiante.apellidoPaterno}} 
+                    {{asistencia.estudiante.apellidoMaterno}} -
+                    {{asistencia.estudiante.codigoEstudiante}} 
+                  </div>
+                  </h5>
+                  <span>
+                    {{mensaje}}
+                  </span>
+    
+                </div>
+    
+            </div>
+          </div>
+            <div class="row row-cols-1 row-cols-md-3 g-4" *ngIf="asistenciasSimulacion.length == 0 && !ingresoAsistencia && !salidaAsistencia">
+                <div class="col" *ngFor="let item of simulacionesItem; let i = index" >
+                    <div  class="card" style="width: 18rem;" (click)="cargarAsistenciasSimulacion(item.asistenciasSimulacion)"  style="cursor: pointer;">
+                        <div class="card-header text-white bg-primary">
+                            Aula {{i+1}}
+                          </div>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngFor="let asistencia of item.asistenciasSimulacion">{{asistencia.estudiante.nombre}} {{asistencia.estudiante.apellidoPaterno}}</li>
+                          </ul>   
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="card mt-3" *ngIf="asistenciasSimulacion.length > 0 && !ingresoAsistencia && !salidaAsistencia">
+              <div>
+                
+              </div>
+              
+              <div class="card-header"><h4 style="display: inline-block;">Estudiantes</h4> <button type="button" class="btn btn-secondary btn-sm ms-3" (click)="cerrarModalAsistneciasSimulacion()">Regresar</button></div>
+              <div class="card-body">
+                  <div class="d-flex justify-content-between w-100" >
+                      <div>
+                          <h4>Asistieron</h4>
+                          <ul class="list-group">
+                              <li class="list-group-item d-flex justify-content-between" style="width: 500px;" *ngFor="let asistencia of listaAsistenciaConfirmada">
+                                  {{asistencia.estudiante.nombre}} {{asistencia.estudiante.apellidoPaterno}} {{asistencia.estudiante.apellidoPaterno}} - {{asistencia.estudiante.codigoEstudiante}}
+                                  <div >
+                                      <div class="form-check form-check-inline">
+                                          <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" disabled [(ngModel)]="asistencia.ingresoConfirmado">
+                                          <label class="form-check-label" for="inlineCheckbox3">A</label>
+                                      </div>
+                                      <div class="form-check form-check-inline">
+                                          <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" disabled [(ngModel)]="asistencia.salidaConfirmado">
+                                          <label class="form-check-label" for="inlineCheckbox3">S</label>
+                                      </div>
+                                  </div>
+                              </li>
+                              <li class="list-group-item list-group-item-info" style="width: 500px;" *ngIf="listaAsistenciaConfirmada.length == 0">
+                                  No hay estudiantes con asistencia.
+                              </li>
+                          </ul>
+                      </div>
+                      <div>
+                        <h4>No Asistieron</h4>
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between" style="width: 500px;" *ngFor="let asistencia of listaAsistenciaNoConfirmada">
+                                {{asistencia.estudiante.nombre}} {{asistencia.estudiante.apellidoPaterno}} {{asistencia.estudiante.apellidoPaterno}} - {{asistencia.estudiante.codigoEstudiante}}
+                                <div >
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" disabled [(ngModel)]="asistencia.ingresoConfirmado">
+                                        <label class="form-check-label" for="inlineCheckbox3">A</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" disabled [(ngModel)]="asistencia.salidaConfirmado">
+                                        <label class="form-check-label" for="inlineCheckbox3">S</label>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item list-group-item-info" style="width: 500px;" *ngIf="listaAsistenciaNoConfirmada.length == 0">
+                                No hay estudiantes con asistencia.
+                            </li>
+                        </ul>
+                    </div>
+                  
+                  </div>
+              </div>
+          
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="limpiarItems()">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+ 
+</div>
